@@ -6,11 +6,14 @@ import game.Player;
 
 public class AI
 {
-	ArrayList<Double> input = new ArrayList<Double>();
+	ArrayList<Double> input = new ArrayList<>();
 	Player player;
-
+	Generation currentGeneration;
+	int generationNumber = 1;
+	
 	public void Init(Player player)
 	{
+		currentGeneration = new Generation(Mutator.Mutate());
 		this.player = player;
 		input.add(player.getX());
 		input.add((double) 0);
@@ -27,12 +30,22 @@ public class AI
 	{
 		input.set(0, player.getX());
 
-		FeedForward(input);
+		int output = currentGeneration.currentSpecies.FeedForward(input);
+
+		if (output > 0)
+		{
+			player.moveRight();
+		}
+		else if (output < 0)
+		{
+			player.moveLeft();
+		}
 	}
 
-	void FeedForward(ArrayList<Double> inputData)
+	
+	/*public void CreateOffspring(double objectiveValue)
 	{
-		player.moveRight();
-		player.moveLeft();
-	}
+		currentGeneration = new Generation(Mutator.Mutate(currentGeneration., strength))
+		generationNumber++;
+	}*/
 }
