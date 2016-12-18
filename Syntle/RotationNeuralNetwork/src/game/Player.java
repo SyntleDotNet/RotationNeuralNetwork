@@ -24,6 +24,11 @@ public class Player
 		
 		x += speed;
 		speed *= 1 - friction;
+		
+		if (x > 500 - size)
+			x = 500 - size;
+		if (x < size)
+			x = size;
 	}
 	
 	public void moveLeft()
