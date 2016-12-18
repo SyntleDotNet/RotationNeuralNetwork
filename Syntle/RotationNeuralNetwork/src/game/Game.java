@@ -1,17 +1,22 @@
 package game;
 
-import org.lwjgl.*;
-import org.lwjgl.glfw.*;
-import org.lwjgl.opengl.*;
-
-import static org.lwjgl.glfw.Callbacks.*;
+import static org.lwjgl.glfw.Callbacks.glfwFreeCallbacks;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
+
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.opengl.GL;
 
 public class Game
 {
 	private long window;
+
+	private double width = 500;
+	private double height = 1000;
+	
+	private Player player = new Player();
 
 	public static void main(String[] args)
 	{
@@ -25,13 +30,11 @@ public class Game
 			init();
 			loop();
 
-			// Free the window callbacks and destroy the window
 			glfwFreeCallbacks(window);
 			glfwDestroyWindow(window);
 		}
 		finally
 		{
-			// Terminate GLFW and free the error callback
 			glfwTerminate();
 			glfwSetErrorCallback(null).free();
 		}
@@ -39,73 +42,87 @@ public class Game
 
 	private void init()
 	{
-		// Setup error callback
 		GLFWErrorCallback.createPrint(System.err).set();
-
-		// Initialize GLFW
 		if (!glfwInit())
 			throw new IllegalStateException("Unable to initialize GLFW");
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
+		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
-		// Configure our window
-		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden
-													// after creation
-		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // Make resizable
-
-		int WIDTH = 300;
-		int HEIGHT = 300;
-
-		// Create the window
-		window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
+		window = glfwCreateWindow((int) width, (int) height, "Rotation", NULL, NULL);
 		if (window == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
 
-		// Setup a key callback. It will be called every time a key is pressed,
-		// repeated or released.
 		glfwSetKeyCallback(window, (window, key, scancode, action, mods) ->
 		{
 			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
-				glfwSetWindowShouldClose(window, true); // We will detect this
-														// in our rendering loop
+				glfwSetWindowShouldClose(window, true);
 		});
-
-		// Get the resolution of the primary monitor
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		// Center our window
-		glfwSetWindowPos(window, (vidmode.width() - WIDTH) / 2, (vidmode.height() - HEIGHT) / 2);
-
-		// Make the OpenGL context current
+		glfwSetWindowPos(window, (vidmode.width() - (int) width) / 2, (vidmode.height() - (int) height) / 2);
 		glfwMakeContextCurrent(window);
-		// Enable v-sync
 		glfwSwapInterval(1);
-
-		// Make the window visible
 		glfwShowWindow(window);
 	}
 
+	private double rotation = 0.0;
 	private void loop()
 	{
-		// This line is critical for LWJGL's interoperation with GLFW's
-		// OpenGL context, or any context that is managed externally.
-		// LWJGL detects the context that is current in the current thread,
-		// creates the GLCapabilities instance and makes the OpenGL
-		// bindings available for use.
 		GL.createCapabilities();
+		glClearColor(0, 0, 0, 0);
+		glViewport(0, 0, (int) width, (int) height);
+		
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		glOrtho(0, width, 0, height, -1, 1);
+		glMatrixMode(GL_MODELVIEW);
 
-		// Set the clear color
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-		// Run the rendering loop until the user has attempted to close
-		// the window or has pressed the ESCAPE key.
 		while (!glfwWindowShouldClose(window))
 		{
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the
-																// framebuffer
-
-			glfwSwapBuffers(window); // swap the color buffers
-
-			// Poll for window events. The key callback above will only be
-			// invoked during this call.
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
+			glBegin(GL_QUADS);
+			glColor3d(179.0/255, 157.0/255, 219.0/255);
+			glVertex2d(0, 0);
+			glVertex2d(width, 0);
+			glColor3d(38.0/255, 198.0/255, 218.0/255);
+			glVertex2d(width, height);
+			glVertex2d(0, height);
+			glEnd();
+			
+			double size = player.getSize();
+			double halfSize = size * 0.5;
+			double x = player.getX();
+			double y = player.getY();
+			
+			// Shadow
+			glTranslated(6, -6, 0);
+			glRotated(rotation, 0, 0, 0);
+			glBegin(GL_QUADS);
+			glColor4d(0, 0, 0, 0.5);
+			glVertex2d(x - halfSize, y - halfSize);
+			glVertex2d(x + halfSize, y - halfSize);
+			glVertex2d(x + halfSize, y + halfSize);
+			glVertex2d(x - halfSize, y + halfSize);
+			glEnd();
+			glTranslated(-6, 6, 0);
+			
+			// Player
+			glBegin(GL_QUADS);
+			glColor4d(216.0/255, 27.0/255, 96.0/255, 1.0);
+			glVertex2d(x - halfSize, y - halfSize);
+			glVertex2d(x + halfSize, y - halfSize);
+			glVertex2d(x + halfSize, y + halfSize);
+			glVertex2d(x - halfSize, y + halfSize);
+			glEnd();
+			glLoadIdentity();
+			
+			glfwSwapBuffers(window);
 			glfwPollEvents();
+			
+			rotation += 1;
 		}
 	}
 
