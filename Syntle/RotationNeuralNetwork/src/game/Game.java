@@ -9,38 +9,46 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class Game {
+public class Game
+{
 	private long window;
 
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		new Game().run();
 	}
-	
-	public void run() {
-		try {
+
+	public void run()
+	{
+		try
+		{
 			init();
 			loop();
 
 			// Free the window callbacks and destroy the window
 			glfwFreeCallbacks(window);
 			glfwDestroyWindow(window);
-		} finally {
+		}
+		finally
+		{
 			// Terminate GLFW and free the error callback
 			glfwTerminate();
 			glfwSetErrorCallback(null).free();
 		}
 	}
 
-	private void init() {
+	private void init()
+	{
 		// Setup error callback
 		GLFWErrorCallback.createPrint(System.err).set();
 
 		// Initialize GLFW
-		if ( !glfwInit() )
+		if (!glfwInit())
 			throw new IllegalStateException("Unable to initialize GLFW");
 
 		// Configure our window
-		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
+		glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden
+													// after creation
 		glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // Make resizable
 
 		int WIDTH = 300;
@@ -48,23 +56,22 @@ public class Game {
 
 		// Create the window
 		window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
-		if ( window == NULL )
+		if (window == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
 
-		// Setup a key callback. It will be called every time a key is pressed, repeated or released.
-		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-			if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-				glfwSetWindowShouldClose(window, true); // We will detect this in our rendering loop
+		// Setup a key callback. It will be called every time a key is pressed,
+		// repeated or released.
+		glfwSetKeyCallback(window, (window, key, scancode, action, mods) ->
+		{
+			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+				glfwSetWindowShouldClose(window, true); // We will detect this
+														// in our rendering loop
 		});
 
 		// Get the resolution of the primary monitor
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		// Center our window
-		glfwSetWindowPos(
-			window,
-			(vidmode.width() - WIDTH) / 2,
-			(vidmode.height() - HEIGHT) / 2
-		);
+		glfwSetWindowPos(window, (vidmode.width() - WIDTH) / 2, (vidmode.height() - HEIGHT) / 2);
 
 		// Make the OpenGL context current
 		glfwMakeContextCurrent(window);
@@ -75,7 +82,8 @@ public class Game {
 		glfwShowWindow(window);
 	}
 
-	private void loop() {
+	private void loop()
+	{
 		// This line is critical for LWJGL's interoperation with GLFW's
 		// OpenGL context, or any context that is managed externally.
 		// LWJGL detects the context that is current in the current thread,
@@ -88,8 +96,10 @@ public class Game {
 
 		// Run the rendering loop until the user has attempted to close
 		// the window or has pressed the ESCAPE key.
-		while ( !glfwWindowShouldClose(window) ) {
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+		while (!glfwWindowShouldClose(window))
+		{
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the
+																// framebuffer
 
 			glfwSwapBuffers(window); // swap the color buffers
 
@@ -98,6 +108,5 @@ public class Game {
 			glfwPollEvents();
 		}
 	}
-
 
 }
