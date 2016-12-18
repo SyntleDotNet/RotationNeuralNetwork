@@ -56,6 +56,11 @@ public class Game
 		{
 			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
 				glfwSetWindowShouldClose(window, true);
+			
+			if (action == GLFW_PRESS)
+				Keyboard.pressed(key);
+			if (action == GLFW_RELEASE)
+				Keyboard.released(key);
 		});
 		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 		glfwSetWindowPos(window, (vidmode.width() - (int) width) / 2, (vidmode.height() - (int) height) / 2);
@@ -99,7 +104,9 @@ public class Game
 			
 			// Shadow
 			glTranslated(6, -6, 0);
-			glRotated(rotation, 0, 0, 0);
+			glTranslated(x, y, 0);
+			glRotated(rotation, 0, 0, 1);
+			glTranslated(-x, -y, 0);
 			glBegin(GL_QUADS);
 			glColor4d(0, 0, 0, 0.5);
 			glVertex2d(x - halfSize, y - halfSize);
@@ -108,8 +115,12 @@ public class Game
 			glVertex2d(x - halfSize, y + halfSize);
 			glEnd();
 			glTranslated(-6, 6, 0);
+			glLoadIdentity();
 			
 			// Player
+			glTranslated(x, y, 0);
+			glRotated(rotation, 0, 0, 1);
+			glTranslated(-x, -y, 0);
 			glBegin(GL_QUADS);
 			glColor4d(216.0/255, 27.0/255, 96.0/255, 1.0);
 			glVertex2d(x - halfSize, y - halfSize);
@@ -122,7 +133,8 @@ public class Game
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 			
-			rotation += 1;
+			rotation -= player.getSpeed();
+			player.update();
 		}
 	}
 
