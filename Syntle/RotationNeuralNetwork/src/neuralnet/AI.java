@@ -27,7 +27,7 @@ public class AI
 		input.add((double) 0);
 	}
 
-	public void Update(double objectiveValue, double gapX, double gapY)
+	public void Update(double gapX, double gapY)
 	{
 		input.set(0, player.getX());
 		input.set(1, gapX);
@@ -35,11 +35,11 @@ public class AI
 
 		int output = currentGeneration.currentSpecies.FeedForward(input);
 
-		if (output > 0)
+		if (output == 1)
 		{
 			player.moveRight();
 		}
-		else if (output < 0)
+		else if (output == -1)
 		{
 			player.moveLeft();
 		}
