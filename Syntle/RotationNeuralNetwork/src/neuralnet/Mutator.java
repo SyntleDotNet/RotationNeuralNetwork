@@ -37,6 +37,7 @@ public class Mutator
 				{
 					for (int k = 0; k < AI.nodes; k++)
 					{
+						System.out.println(i + ", " + j + ", " + k);
 						weights[i][j][k] += (random.nextDouble() - 0.5) * magnitude;
 					}
 				}
@@ -49,7 +50,7 @@ public class Mutator
 	public static double[][][] Mutate()
 	{
 		// weights is a list of layers
-		// weights[0] is a list of nodes in the last layer (this is one in thiscase)
+		// weights[0] is a list of nodes in the last layer (this is one in this case)
 		// weights[0][0] is a list of weights from each node to node 0 of the last layer
 		double[][][] weights = new double[AI.layers + 1][][];
 		weights[0] = new double[AI.outputs][];
@@ -83,6 +84,7 @@ public class Mutator
 					weights[i][j] = new double[AI.nodes];
 					for (int k = 0; k < AI.nodes; k++)
 					{
+						System.out.println(i + ", " + j + ", " + k);
 						weights[i][j][k] = random.nextDouble() * scaleFactor;
 					}
 				}

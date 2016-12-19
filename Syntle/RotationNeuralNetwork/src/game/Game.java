@@ -56,6 +56,8 @@ import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import neuralnet.AI;
+
 public class Game
 {
 	private long window;
@@ -66,6 +68,8 @@ public class Game
 	private Player player = new Player();
 	
 	private ArrayList<Block> blocks = new ArrayList<>();
+	
+	private AI ai;
 
 	public static void main(String[] args)
 	{
@@ -116,11 +120,15 @@ public class Game
 		glfwMakeContextCurrent(window);
 		glfwSwapInterval(1);
 		glfwShowWindow(window);
+		
+		ai = new AI();
+		//ai.Init(player);
 	}
 
 	private double rotation = 0.0;
-	private double time = 0;
-	private double threshold = 100;
+	private int score = 0;
+	private double threshold = 150;
+	private double speed = 2.0;
 	private void loop()
 	{
 		GL.createCapabilities();
@@ -183,22 +191,49 @@ public class Game
 			glEnd();
 			glLoadIdentity();
 			
-			for (Block block : blocks)
-				block.render();
+			double greatestBlockY = 0;
+			ArrayList<Integer> toRemove = new ArrayList<Integer>();
+			for (int i = 0; i < blocks.size(); i += 1)
+			{
+				Block block = blocks.get(i);
+				block.render(speed);
+				if (block.getY() > greatestBlockY)
+					greatestBlockY = block.getY();
+				if (block.getY() < -Block.getHeight() * 0.5)
+					toRemove.add(i);
+			}
+			for (Integer i : toRemove)
+				blocks.remove(i);
+			if (greatestBlockY < threshold)
+			{
+				blocks.add(new Block());
+				threshold += 15;
+				if (threshold > 800)
+					threshold = 800;
+			}
 			
 			glfwSwapBuffers(window);
 			glfwPollEvents();
 			
 			rotation -= player.getSpeed();
 			player.update();
-			time += 1;
+			score += 1;
+			speed += 0.001;
 			
-			if (time > threshold)
+			double leastY = 1000;
+			Block lowestBlock = null;
+			for (Block block : blocks)
 			{
-				blocks.add(new Block());
-				time = 0;
-				threshold -= 1;
+				block.render(speed);
+				if (block.getY() < leastY)
+				{
+					leastY = block.getY();
+					lowestBlock = block;
+				}
 			}
+			
+			//if (lowestBlock != null)
+				//ai.Update(lowestBlock.gapX(), leastY);
 		}
 	}
 

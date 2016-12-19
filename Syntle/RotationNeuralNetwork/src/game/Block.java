@@ -13,8 +13,8 @@ public class Block
 	private Random rand = new Random();
 	
 	private double gapX;
-	private final double gapWidth = 120;
-	private final double height = 40;
+	private final double gapWidth = 150;
+	private static final double height = 50;
 	private double y = 1000 + height;
 	
 	public Block()
@@ -22,9 +22,9 @@ public class Block
 		gapX = rand.nextDouble() * (500 - gapWidth) + gapWidth * 0.5;
 	}
 	
-	public void render()
+	public void render(double speed)
 	{
-		y -= 2;
+		y -= speed;
 		
 		glBegin(GL_QUADS);
 		glColor3d(98.0/255, 0.0/255, 234.0/255);
@@ -41,5 +41,20 @@ public class Block
 		glVertex2d(gapX + gapWidth * 0.5 + width2, y + height);
 		glVertex2d(gapX + gapWidth * 0.5, y + height);
 		glEnd();
+	}
+	
+	public double getY()
+	{
+		return y;
+	}
+	
+	public double gapX()
+	{
+		return gapX;
+	}
+	
+	public static double getHeight()
+	{
+		return height;
 	}
 }
