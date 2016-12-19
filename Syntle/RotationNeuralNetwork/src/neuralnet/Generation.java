@@ -10,7 +10,7 @@ public class Generation
 
 	Generation(double[][][] weights)
 	{
-		currentSpecies = new Species(Mutator.Mutate(weights, Mutator.speciesMutation));
+		currentSpecies = new Species(Mutator.Mutate(weights, AI.speciesMutation));
 		fittestWeights = currentSpecies.weights;
 		generationWeighting = weights;
 	}
@@ -23,7 +23,7 @@ public class Generation
 			fittestWeights = currentSpecies.weights;
 		}
 
-		currentSpecies = new Species(Mutator.Mutate(generationWeighting, Mutator.speciesMutation));
+		currentSpecies = new Species(Mutator.Mutate(generationWeighting, AI.speciesMutation));
 		speciesNumber++;
 	}
 }

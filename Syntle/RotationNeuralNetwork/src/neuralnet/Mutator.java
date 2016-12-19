@@ -4,11 +4,9 @@ import java.util.Random;
 
 public class Mutator
 {
-	public static double speciesMutation = 1;
 	static Random random = new Random();
 	public static int scaleFactor = 2;
 
-	
 	public static double[][][] Mutate(double[][][] weights, double magnitude)
 	{
 		// Weights to output nodes
@@ -21,9 +19,9 @@ public class Mutator
 		}
 
 		// Weights for all other layers
-		for (int i = 1; i < AI.layers; i++)
+		for (int i = 1; i < AI.layers + 1; i++)
 		{
-			if (i == AI.layers - 1)  // Weights from input nodes
+			if (i == AI.layers - 1) // Weights from input nodes
 			{
 				for (int j = 0; j < AI.nodes; j++)
 				{
@@ -33,7 +31,7 @@ public class Mutator
 					}
 				}
 			}
-			else  // Weights from other middle layer nodes
+			else // Weights from other middle layer nodes
 			{
 				for (int j = 0; j < AI.nodes; j++)
 				{
@@ -51,11 +49,9 @@ public class Mutator
 	public static double[][][] Mutate()
 	{
 		// weights is a list of layers
-		// weights[0] is a list of nodes in the last layer (this is one in this
-		// case)
-		// weights[0][0] is a list of weights from each node to node 0 of the
-		// last layer
-		double[][][] weights = new double[AI.layers][][];
+		// weights[0] is a list of nodes in the last layer (this is one in thiscase)
+		// weights[0][0] is a list of weights from each node to node 0 of the last layer
+		double[][][] weights = new double[AI.layers + 1][][];
 		weights[0] = new double[AI.outputs][];
 		for (int i = 0; i < AI.outputs; i++)
 		{
@@ -66,10 +62,10 @@ public class Mutator
 			}
 		}
 
-		for (int i = 1; i < AI.layers; i++)
+		for (int i = 1; i < AI.layers + 1; i++)
 		{
 			weights[i] = new double[AI.nodes][];
-			if (i == AI.layers - 1)
+			if (i == AI.layers)
 			{
 				for (int j = 0; j < AI.nodes; j++)
 				{

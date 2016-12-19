@@ -13,8 +13,11 @@ public class Species
 
 	int FeedForward(ArrayList<Double> inputData)
 	{
-		
-		
-		return 0;
+		double output = NeuralNetwork.FeedFoward(inputData, weights);
+		if (output > AI.threshold)
+			return 1;
+		if (output < -AI.threshold)
+			return -1;
+		else return 0;
 	}
 }

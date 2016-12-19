@@ -10,10 +10,13 @@ public class AI
 	Player player;
 	Generation currentGeneration;
 	int generationNumber = 1;
+	
+	// Natural Selection / Evolution Model Configuration
 	int speciesCount = 10;
 
-	// Neural Network settings
-	public static int layers = 2, nodes = 4, inputs = 3, outputs = 1;
+	// Neural Network Configuration (suggest leaving layers,nodes + inputs as is)
+	public static int layers = 1, nodes = 4, inputs = 3, outputs = 1, threshold = 1;
+	public static double speciesMutation = 1;
 	
 	public void Init(Player player)
 	{
