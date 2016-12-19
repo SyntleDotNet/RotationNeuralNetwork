@@ -4,15 +4,17 @@ import java.util.ArrayList;
 
 public class Species
 {
-	ArrayList<Double> weights;
+	double[][][] weights;
 
-	Species(ArrayList<Double> weights)
+	Species(double[][][] weights)
 	{
 		this.weights = weights;
 	}
 
 	int FeedForward(ArrayList<Double> inputData)
 	{
+		
+		
 		return 0;
 	}
 }

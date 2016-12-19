@@ -11,6 +11,9 @@ public class AI
 	Generation currentGeneration;
 	int generationNumber = 1;
 	int speciesCount = 10;
+
+	// Neural Network settings
+	public static int layers = 2, nodes = 4, inputs = 3, outputs = 1;
 	
 	public void Init(Player player)
 	{
@@ -26,7 +29,7 @@ public class AI
 		input.set(0, player.getX());
 		input.set(1, gapX);
 		input.set(2, gapY);
-		
+
 		int output = currentGeneration.currentSpecies.FeedForward(input);
 
 		if (output > 0)
@@ -38,15 +41,14 @@ public class AI
 			player.moveLeft();
 		}
 	}
-	
+
 	public void Death(double objectiveValue)
 	{
-		
-	}
-	
-	void CreateOffspring(double objectiveValue)
-	{
-		currentGeneration = new Generation(currentGeneration.fittestWeights);
-		generationNumber++;
+		currentGeneration.OnDeath(objectiveValue);
+		if (currentGeneration.speciesNumber > speciesCount)
+		{
+			currentGeneration = new Generation(currentGeneration.fittestWeights);
+			generationNumber++;
+		}
 	}
 }

@@ -1,18 +1,29 @@
 package neuralnet;
 
-import java.util.ArrayList;
-
 public class Generation
 {
 	public int speciesNumber = 1;
 	public Species currentSpecies;
-	public ArrayList<Double> fittestWeights;
+	public double[][][] fittestWeights;
 	public double highestFitness;
+	double[][][] generationWeighting;
 
-	Generation(ArrayList<Double> weights)
+	Generation(double[][][] weights)
 	{
-		currentSpecies = new Species(Mutator.Mutate(weights, 1));
+		currentSpecies = new Species(Mutator.Mutate(weights, Mutator.speciesMutation));
+		fittestWeights = currentSpecies.weights;
+		generationWeighting = weights;
 	}
-	
-	
+
+	public void OnDeath(double fitness)
+	{
+		if (fitness > highestFitness)
+		{
+			highestFitness = fitness;
+			fittestWeights = currentSpecies.weights;
+		}
+
+		currentSpecies = new Species(Mutator.Mutate(generationWeighting, Mutator.speciesMutation));
+		speciesNumber++;
+	}
 }
