@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Mutator
 {
-	public static ArrayList<Double> Mutate(ArrayList<Double> weights, int strength)
+	public static ArrayList<Double> Mutate(ArrayList<Double> weights, double d)
 	{
 		return weights;
 	}

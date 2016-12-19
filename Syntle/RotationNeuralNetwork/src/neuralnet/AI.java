@@ -10,6 +10,7 @@ public class AI
 	Player player;
 	Generation currentGeneration;
 	int generationNumber = 1;
+	int speciesCount = 10;
 	
 	public void Init(Player player)
 	{
@@ -20,16 +21,12 @@ public class AI
 		input.add((double) 0);
 	}
 
-	public void UpdateLowestGap(double x, double y)
-	{
-		input.set(1, x);
-		input.set(2, y);
-	}
-
-	public void Update(double objectiveValue)
+	public void Update(double objectiveValue, double gapX, double gapY)
 	{
 		input.set(0, player.getX());
-
+		input.set(1, gapX);
+		input.set(2, gapY);
+		
 		int output = currentGeneration.currentSpecies.FeedForward(input);
 
 		if (output > 0)
@@ -41,11 +38,15 @@ public class AI
 			player.moveLeft();
 		}
 	}
-
 	
-	/*public void CreateOffspring(double objectiveValue)
+	public void Death(double objectiveValue)
 	{
-		currentGeneration = new Generation(Mutator.Mutate(currentGeneration., strength))
+		
+	}
+	
+	void CreateOffspring(double objectiveValue)
+	{
+		currentGeneration = new Generation(currentGeneration.fittestWeights);
 		generationNumber++;
-	}*/
+	}
 }
