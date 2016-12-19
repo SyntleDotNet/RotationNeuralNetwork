@@ -15,6 +15,11 @@ public class Player
 	{
 	}
 	
+	public void reset()
+	{
+		x = 250;
+	}
+	
 	public void update()
 	{
 		if (Keyboard.isKeyPressed(GLFW_KEY_A))

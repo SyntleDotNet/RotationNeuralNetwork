@@ -16,7 +16,7 @@ public class AI
 
 	// Neural Network Configuration (suggest leaving layers,nodes + inputs as is)
 	public static int layers = 1, nodes = 4, inputs = 3, outputs = 1, threshold = 1;
-	public static double speciesMutation = 1;
+	public static double speciesMutation = 3;
 	
 	public void Init(Player player)
 	{

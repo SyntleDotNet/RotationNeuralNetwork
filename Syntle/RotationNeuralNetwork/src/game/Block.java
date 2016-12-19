@@ -29,13 +29,13 @@ public class Block
 		glBegin(GL_QUADS);
 		glColor3d(98.0/255, 0.0/255, 234.0/255);
 		
-		double width1 = gapX - gapWidth * 0.5;
+		double width1 = getLeft();
 		glVertex2d(0, y);
 		glVertex2d(width1, y);
 		glVertex2d(width1, y + height);
 		glVertex2d(0, y + height);
 		
-		double width2 = 500 - gapWidth - width1;
+		double width2 = getRight();
 		glVertex2d(gapX + gapWidth * 0.5, y);
 		glVertex2d(gapX + gapWidth * 0.5 + width2, y);
 		glVertex2d(gapX + gapWidth * 0.5 + width2, y + height);
@@ -56,5 +56,15 @@ public class Block
 	public static double getHeight()
 	{
 		return height;
+	}
+	
+	public double getLeft()
+	{
+		return gapX - gapWidth * 0.5;
+	}
+	
+	public double getRight()
+	{
+		return 500 - gapWidth - getLeft();
 	}
 }

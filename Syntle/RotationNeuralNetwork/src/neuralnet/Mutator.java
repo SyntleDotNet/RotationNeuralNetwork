@@ -5,7 +5,7 @@ import java.util.Random;
 public class Mutator
 {
 	static Random random = new Random();
-	public static int scaleFactor = 2;
+	public static int scaleFactor = 1;
 
 	public static double[][][] Mutate(double[][][] weights, double magnitude)
 	{
@@ -21,7 +21,7 @@ public class Mutator
 		// Weights for all other layers
 		for (int i = 1; i < AI.layers + 1; i++)
 		{
-			if (i == AI.layers - 1) // Weights from input nodes
+			if (i == AI.layers) // Weights from input nodes
 			{
 				for (int j = 0; j < AI.nodes; j++)
 				{
@@ -59,7 +59,7 @@ public class Mutator
 			weights[0][i] = new double[AI.nodes];
 			for (int j = 0; j < AI.nodes; j++)
 			{
-				weights[0][i][j] = random.nextDouble() * scaleFactor;
+				weights[0][i][j] = (random.nextDouble() - 0.5) * scaleFactor;
 			}
 		}
 
@@ -73,7 +73,7 @@ public class Mutator
 					weights[i][j] = new double[AI.inputs];
 					for (int k = 0; k < AI.inputs; k++)
 					{
-						weights[i][j][k] = random.nextDouble() * scaleFactor;
+						weights[i][j][k] = (random.nextDouble() - 0.5) * scaleFactor;
 					}
 				}
 			}
@@ -85,7 +85,7 @@ public class Mutator
 					for (int k = 0; k < AI.nodes; k++)
 					{
 						System.out.println(i + ", " + j + ", " + k);
-						weights[i][j][k] = random.nextDouble() * scaleFactor;
+						weights[i][j][k] = (random.nextDouble() - 0.5) * scaleFactor;
 					}
 				}
 			}
