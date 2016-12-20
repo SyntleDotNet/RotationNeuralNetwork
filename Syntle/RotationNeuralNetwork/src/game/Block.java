@@ -22,10 +22,8 @@ public class Block
 		gapX = rand.nextDouble() * (500 - gapWidth) + gapWidth * 0.5;
 	}
 	
-	public void render(double speed)
+	public void render()
 	{
-		y -= speed;
-		
 		glBegin(GL_QUADS);
 		glColor3d(98.0/255, 0.0/255, 234.0/255);
 		
@@ -41,6 +39,11 @@ public class Block
 		glVertex2d(gapX + gapWidth * 0.5 + width2, y + height);
 		glVertex2d(gapX + gapWidth * 0.5, y + height);
 		glEnd();
+	}
+	
+	public void update(double speed)
+	{
+		y -= speed;
 	}
 	
 	public double getY()

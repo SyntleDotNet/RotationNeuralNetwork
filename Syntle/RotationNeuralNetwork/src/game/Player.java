@@ -4,20 +4,22 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Player
 {
-	private double x = 250;
-	private double y = 50;
+	private double x;
+	private final double y = 50;
 	private final double size = 50;
-	private double speed = 0;
+	private double speed;
 	private final double acceleration = 0.8;
 	private final double friction = 0.05;
 	
 	public Player()
 	{
+		reset();
 	}
 	
 	public void reset()
 	{
 		x = 250;
+		speed = 0;
 	}
 	
 	public void update()
