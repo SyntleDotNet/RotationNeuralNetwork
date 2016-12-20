@@ -15,8 +15,8 @@ public class AI
 	int speciesCount = 10;
 
 	// Neural Network Configuration (suggest leaving layers,nodes + inputs as is)
-	public static int layers = 1, nodes = 4, inputs = 3, outputs = 1, threshold = 1;
-	public static double speciesMutation = 3;
+	public static int layers = 20, nodes = 10, inputs = 3, outputs = 1, threshold = 1;
+	public static double speciesMutation = 5;
 	
 	public void Init(Player player)
 	{
@@ -53,5 +53,7 @@ public class AI
 			currentGeneration = new Generation(currentGeneration.fittestWeights);
 			generationNumber++;
 		}
+		speciesMutation = 1.0E9 / Math.pow(objectiveValue, 3);
+		System.out.println(speciesMutation);
 	}
 }

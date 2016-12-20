@@ -36,10 +36,7 @@ public class Mutator
 				for (int j = 0; j < AI.nodes; j++)
 				{
 					for (int k = 0; k < AI.nodes; k++)
-					{
-						System.out.println(i + ", " + j + ", " + k);
 						weights[i][j][k] += (random.nextDouble() - 0.5) * magnitude;
-					}
 				}
 			}
 		}
@@ -83,10 +80,7 @@ public class Mutator
 				{
 					weights[i][j] = new double[AI.nodes];
 					for (int k = 0; k < AI.nodes; k++)
-					{
-						System.out.println(i + ", " + j + ", " + k);
 						weights[i][j][k] = (random.nextDouble() - 0.5) * scaleFactor;
-					}
 				}
 			}
 		}

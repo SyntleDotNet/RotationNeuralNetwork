@@ -17,8 +17,8 @@ public class Game
 {
 	private long window;
 
-	private double width = 500;
-	private double height = 1000;
+	private final double width = 500;
+	private final double height = 1000;
 
 	private Player player = new Player();
 	private UpdateThread updateThread;
@@ -78,7 +78,7 @@ public class Game
 		@Override
 		public void run()
 		{
-			while (true)
+			while (!glfwWindowShouldClose(window))
 			{
 				double greatestBlockY = 0;
 				ArrayList<Integer> toRemove = new ArrayList<Integer>();
@@ -96,14 +96,14 @@ public class Game
 				{
 					for (Integer i : toRemove)
 						blocks.remove((int) i);
-				}
-
-				if (greatestBlockY < threshold)
-				{
-					blocks.add(new Block());
-					threshold += 15;
-					if (threshold > 750)
-						threshold = 750;
+					
+					if (greatestBlockY < threshold)
+					{
+						blocks.add(new Block());
+						threshold += 15;
+						if (threshold > 750)
+							threshold = 750;
+					}
 				}
 
 				rotation -= player.getSpeed();
@@ -129,7 +129,10 @@ public class Game
 						if (player.getY() + player.getSize() * 0.5 > lowestBlock.getY() && player.getY() - player.getSize() * 0.5 < lowestBlock.getY())
 						{
 							ai.Death(score);
-							reset();
+							synchronized (blocks)
+							{
+								reset();
+							}
 						}
 					}
 				}
@@ -263,6 +266,14 @@ public class Game
 			{
 				updateLock.notify();
 			}
+		}
+		try
+		{
+			updateThread.join();
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
 		}
 	}
 }

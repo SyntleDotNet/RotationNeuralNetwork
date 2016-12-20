@@ -1,10 +1,6 @@
 package game;
 
-import static org.lwjgl.opengl.GL11.GL_QUADS;
-import static org.lwjgl.opengl.GL11.glBegin;
-import static org.lwjgl.opengl.GL11.glColor3d;
-import static org.lwjgl.opengl.GL11.glEnd;
-import static org.lwjgl.opengl.GL11.glVertex2d;
+import static org.lwjgl.opengl.GL11.*;
 
 import java.util.Random;
 
@@ -24,16 +20,33 @@ public class Block
 	
 	public void render()
 	{
+		double width1 = getLeft();
+		double width2 = getRight();
+		
+		glTranslated(6, -6, 0);
+		glBegin(GL_QUADS);
+		glColor4d(0, 0, 0, .7);
+		
+		glVertex2d(-6, y);
+		glVertex2d(width1, y);
+		glVertex2d(width1, y + height);
+		glVertex2d(-6, y + height);
+		
+		glVertex2d(gapX + gapWidth * 0.5, y);
+		glVertex2d(gapX + gapWidth * 0.5 + width2, y);
+		glVertex2d(gapX + gapWidth * 0.5 + width2, y + height);
+		glVertex2d(gapX + gapWidth * 0.5, y + height);
+		glEnd();
+		glTranslated(-6, 6, 0);
+		
 		glBegin(GL_QUADS);
 		glColor3d(98.0/255, 0.0/255, 234.0/255);
-		
-		double width1 = getLeft();
+
 		glVertex2d(0, y);
 		glVertex2d(width1, y);
 		glVertex2d(width1, y + height);
 		glVertex2d(0, y + height);
 		
-		double width2 = getRight();
 		glVertex2d(gapX + gapWidth * 0.5, y);
 		glVertex2d(gapX + gapWidth * 0.5 + width2, y);
 		glVertex2d(gapX + gapWidth * 0.5 + width2, y + height);
