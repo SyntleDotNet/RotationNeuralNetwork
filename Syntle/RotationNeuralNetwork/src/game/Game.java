@@ -52,6 +52,7 @@ public class Game
 
 	private double rotation;
 	private int score;
+	private int oldScore;
 	private double threshold;
 	private double speed;
 
@@ -65,7 +66,8 @@ public class Game
 		public void reset()
 		{
 			rotation = 0.0;
-			score = 0;
+			score = 1;
+			oldScore = 0;
 			threshold = 150;
 			speed = 2.0;
 
@@ -89,7 +91,10 @@ public class Game
 					if (block.getY() > greatestBlockY)
 						greatestBlockY = block.getY();
 					if (block.getY() < -Block.getHeight())
+					{
 						toRemove.add(i);
+						score += 1;
+					}
 				}
 				
 				synchronized (blocks)
@@ -108,8 +113,8 @@ public class Game
 
 				rotation -= player.getSpeed();
 				player.update();
-				score += 1;
 				speed += 0.001;
+				oldScore += 1;
 
 				double leastY = 1000;
 				Block lowestBlock = null;
@@ -128,7 +133,7 @@ public class Game
 					{
 						if (player.getY() + player.getSize() * 0.5 > lowestBlock.getY() && player.getY() - player.getSize() * 0.5 < lowestBlock.getY())
 						{
-							ai.Death(score);
+							ai.Death(score, oldScore);
 							synchronized (blocks)
 							{
 								reset();
