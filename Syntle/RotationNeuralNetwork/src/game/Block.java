@@ -16,6 +16,7 @@ public class Block
 	public Block()
 	{
 		gapX = rand.nextDouble() * (500 - gapWidth) + gapWidth * 0.5;
+		//gapX = (0.5 * rand.nextDouble() + 0.25  ) * (500 - gapWidth) + gapWidth * 0.5;
 	}
 	
 	public void render()

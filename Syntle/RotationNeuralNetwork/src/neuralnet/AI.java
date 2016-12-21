@@ -12,10 +12,10 @@ public class AI
 	int generationNumber = 1;
 	
 	// Natural Selection / Evolution Model Configuration
-	int speciesCount = 5;
+	int speciesCount = 10;
 
 	// Neural Network Configuration (suggest leaving layers,nodes + inputs as is)
-	public static int layers = 1, nodes = 3, inputs = 4, outputs = 1, threshold = 1;
+	public static int layers = 1, nodes = 3, inputs = 5, outputs = 1, threshold = 1;
 	public static double speciesMutation = 5;
 	
 	public void Init(Player player)
@@ -26,6 +26,7 @@ public class AI
 		input.add((double) 0);
 		input.add((double) 0);
 		input.add(0D);
+		input.add(1D);
 	}
 
 	public void Update(double gapX, double gapY)
@@ -50,7 +51,7 @@ public class AI
 	double topScore = 0;
 	public void Death(double objectiveValue, double oldScore)
 	{
-		currentGeneration.OnDeath(objectiveValue);
+		currentGeneration.OnDeath(oldScore);
 		if (currentGeneration.speciesNumber > speciesCount)
 		{
 			currentGeneration = new Generation(currentGeneration.fittestWeights);
@@ -58,7 +59,7 @@ public class AI
 		}
 		if (objectiveValue > topScore)
 			topScore = objectiveValue;
-		speciesMutation = 100.0 / Math.pow(objectiveValue, 4);
+		speciesMutation = 5.0 / Math.pow(objectiveValue, 1);
 		System.out.println(String.format("%05d: %03.0f (%.0f) : %f [%03.0f]", generationNumber, objectiveValue, oldScore, speciesMutation, topScore));
 	}
 }
