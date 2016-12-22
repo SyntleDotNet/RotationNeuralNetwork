@@ -23,6 +23,8 @@ public class Game
 	private Player player = new Player();
 	private UpdateThread updateThread;
 	private Object updateLock = new Object();
+	private boolean resetPending = false;
+	private Object resetLock = new Object();
 
 	private ArrayList<Block> blocks = new ArrayList<>();
 
@@ -159,6 +161,16 @@ public class Game
 						}	
 					}
 				}
+				
+				if (resetPending)
+				{
+					reset();
+					synchronized (resetLock)
+					{
+						resetLock.notifyAll();
+					}
+					resetPending = false;
+				}
 			}
 		}
 	}
@@ -179,6 +191,25 @@ public class Game
 		{
 			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
 				glfwSetWindowShouldClose(window, true);
+			
+			if (key == GLFW_KEY_S && action == GLFW_PRESS)
+				ai.saveBestSpeciesSoFar();
+			if (key == GLFW_KEY_L && action == GLFW_PRESS)
+			{
+				resetPending = true;
+				synchronized (resetLock)
+				{
+					try
+					{
+						resetLock.wait();
+					}
+					catch (InterruptedException e)
+					{
+						e.printStackTrace();
+					}
+					ai.loadSpecies();
+				}
+			}
 
 			if (action == GLFW_PRESS)
 				Keyboard.pressed(key);
