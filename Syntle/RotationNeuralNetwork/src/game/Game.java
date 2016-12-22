@@ -207,6 +207,10 @@ public class Game
 				{
 					try
 					{
+						synchronized (updateLock)
+						{
+							updateLock.notifyAll();
+						}
 						resetLock.wait();
 					}
 					catch (InterruptedException e)
