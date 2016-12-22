@@ -70,6 +70,6 @@ public class NeuralNetwork
 
 	public static boolean Sigmoid(double x)
 	{
-		return (1 / (1 + Math.exp(-x))) > 0.5;
+		return (1 / (1 + Math.exp(-x))) > AI.threshold;
 	}
 }

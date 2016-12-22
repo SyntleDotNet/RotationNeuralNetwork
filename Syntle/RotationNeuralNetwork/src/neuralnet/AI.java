@@ -20,7 +20,7 @@ public class AI
 	int generationNumber = 1;
 
 	// Natural Selection / Evolution Model Configuration
-	int speciesCount = 200;
+	int speciesCount = 10;
 
 	// Neural Network Configuration (suggest leaving layers,nodes + inputs as is)
 	public static int layers = 1, nodes = 3, inputs = 4, outputs = 2;
