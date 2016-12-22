@@ -18,7 +18,7 @@ public class Player
 	
 	public void reset()
 	{
-		x = 250;
+		x = Game.width * 0.5;
 		speed = 0;
 	}
 	
@@ -32,8 +32,8 @@ public class Player
 		x += speed;
 		speed *= 1 - friction;
 		
-		if (x > 500 - size)
-			x = 500 - size;
+		if (x > Game.width - size)
+			x = Game.width - size;
 		if (x < size)
 			x = size;
 	}
