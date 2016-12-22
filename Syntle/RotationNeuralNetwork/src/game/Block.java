@@ -11,11 +11,11 @@ public class Block
 	private double gapX;
 	private final double gapWidth = 150;
 	private static final double height = 50;
-	private double y = 1000 + height;
+	private double y = Game.height + height;
 	
 	public Block()
 	{
-		gapX = rand.nextDouble() * (500 - gapWidth) + gapWidth * 0.5;
+		gapX = rand.nextDouble() * (Game.width - gapWidth) + gapWidth * 0.5;
 	}
 	
 	public void render()
@@ -81,6 +81,6 @@ public class Block
 	
 	public double getRight()
 	{
-		return 500 - gapWidth - getLeft();
+		return Game.width - gapWidth - getLeft();
 	}
 }

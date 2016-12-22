@@ -18,8 +18,8 @@ public class Game
 	private long window;
 
 	private final double widthToHeightRatio = 9D / 16;
-	private double width;
-	private double height = 1000;
+	public static double width;
+	public static double height = 1000;
 
 	private Player player = new Player();
 	private UpdateThread updateThread;
@@ -132,7 +132,7 @@ public class Game
 
 				if (lowestBlock != null)
 				{
-					if (!(player.getX() - player.getSize() * 0.5 > lowestBlock.getLeft() && player.getX() + player.getSize() * 0.5 < 500 - lowestBlock.getRight()))
+					if (!(player.getX() - player.getSize() * 0.5 > lowestBlock.getLeft() && player.getX() + player.getSize() * 0.5 < width - lowestBlock.getRight()))
 					{
 						if (player.getY() + player.getSize() * 0.5 > lowestBlock.getY() && player.getY() - player.getSize() * 0.5 < lowestBlock.getY())
 						{
