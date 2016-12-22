@@ -20,7 +20,7 @@ public class AI
 	int generationNumber = 1;
 
 	// Natural Selection / Evolution Model Configuration
-	int speciesCount = 10;
+	int speciesCount = 5;
 
 	// Neural Network Configuration (suggest leaving layers,nodes + inputs as is)
 	public static int layers = 1, nodes = 5, inputs = 4, outputs = 1, threshold = 1;
@@ -66,13 +66,13 @@ public class AI
 			topScore = objectiveValue;
 			bestSoFar = currentGeneration.currentSpecies;
 		}
-		currentGeneration.OnDeath(objectiveValue);
+		currentGeneration.OnDeath(Math.pow(oldScore, 3));
 		if (currentGeneration.speciesNumber > speciesCount)
 		{
 			currentGeneration = new Generation(currentGeneration.fittestWeights);
 			generationNumber++;
 		}
-		speciesMutation = 100.0 / Math.pow(objectiveValue, 4);
+		speciesMutation = 1.0 / objectiveValue;//100.0 / Math.pow(objectiveValue, 4);
 		System.out.println(String.format("%05d: %03.0f (%.0f) : %f [%03.0f]", generationNumber, objectiveValue, oldScore, speciesMutation, topScore));
 	}
 

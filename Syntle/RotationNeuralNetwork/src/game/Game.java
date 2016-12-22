@@ -17,8 +17,9 @@ public class Game
 {
 	private long window;
 
-	private final double width = 500;
-	private final double height = 1000;
+	private final double widthToHeightRatio = 9D / 16;
+	private double width;
+	private double height = 1000;
 
 	private Player player = new Player();
 	private UpdateThread updateThread;
@@ -177,6 +178,11 @@ public class Game
 
 	private void init()
 	{
+		if (height != 0)
+			width = height * widthToHeightRatio;
+		else if (width != 0)
+			height = width / widthToHeightRatio;
+		
 		GLFWErrorCallback.createPrint(System.err).set();
 		if (!glfwInit())
 			throw new IllegalStateException("Unable to initialize GLFW");
@@ -300,7 +306,7 @@ public class Game
 			
 			synchronized (updateLock)
 			{
-				updateLock.notify();
+				updateLock.notifyAll();
 			}
 		}
 		try

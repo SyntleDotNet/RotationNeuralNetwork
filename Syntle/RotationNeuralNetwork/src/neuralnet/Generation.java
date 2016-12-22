@@ -23,7 +23,7 @@ public class Generation
 			fittestWeights = currentSpecies.weights;
 		}
 
-		currentSpecies = new Species(Mutator.Mutate(generationWeighting, AI.speciesMutation));
+		currentSpecies = new Species(Mutator.Mutate(generationWeighting, Math.pow(AI.speciesMutation, speciesNumber)));
 		speciesNumber++;
 	}
 }
