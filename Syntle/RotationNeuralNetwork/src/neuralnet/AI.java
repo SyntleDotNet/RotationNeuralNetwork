@@ -20,11 +20,11 @@ public class AI
 	int generationNumber = 1;
 
 	// Natural Selection / Evolution Model Configuration
-	int speciesCount = 5;
+	int speciesCount = 200;
 
 	// Neural Network Configuration (suggest leaving layers,nodes + inputs as is)
-	public static int layers = 1, nodes = 5, inputs = 4, outputs = 1, threshold = 1;
-	public static double speciesMutation = 5;
+	public static int layers = 1, nodes = 3, inputs = 4, outputs = 2;
+	public static double speciesMutation = 5, threshold = 0.7;
 	
 	private Species bestSoFar;
 
@@ -45,13 +45,13 @@ public class AI
 		input.set(2, gapY);
 		input.set(3, player.getSpeed());
 
-		int output = currentGeneration.currentSpecies.FeedForward(input);
+		boolean[] output = currentGeneration.currentSpecies.FeedForward(input);
 
-		if (output == 1)
+		if (output[0])
 		{
 			player.moveRight();
 		}
-		else if (output == -1)
+		if (output[1])
 		{
 			player.moveLeft();
 		}

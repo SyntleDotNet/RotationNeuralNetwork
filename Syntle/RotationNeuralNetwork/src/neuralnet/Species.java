@@ -22,14 +22,9 @@ public class Species implements Serializable
 		load(in);
 	}
 
-	int FeedForward(ArrayList<Double> inputData)
+	boolean[] FeedForward(ArrayList<Double> inputData)
 	{
-		double output = NeuralNetwork.FeedFoward(inputData, weights);
-		if (output > AI.threshold)
-			return 1;
-		if (output < -AI.threshold)
-			return -1;
-		else return 0;
+		return NeuralNetwork.FeedFoward(inputData, weights);
 	}
 	
 	public void save(DataOutputStream stream) throws IOException
