@@ -136,7 +136,7 @@ public class Game
 					{
 						if (player.getY() + player.getSize() * 0.5 > lowestBlock.getY() && player.getY() - player.getSize() * 0.5 < lowestBlock.getY())
 						{
-							ai.Death(score, oldScore);
+							ai.death(score, oldScore);
 							synchronized (blocks)
 							{
 								reset();
@@ -146,7 +146,7 @@ public class Game
 				}
 
 				if (lowestBlock != null)
-					ai.Update(lowestBlock.gapX(), leastY);
+					ai.update(lowestBlock.gapX(), leastY);
 
 				if (Keyboard.isKeyPressed(GLFW_KEY_SPACE))
 				{
@@ -233,7 +233,7 @@ public class Game
 		glfwShowWindow(window);
 
 		ai = new AI();
-		ai.Init(player);
+		ai.init(player);
 	}
 
 	private void loop()

@@ -26,11 +26,12 @@ public class AI
 	public static int layers = 1, nodes = 3, inputs = 4, outputs = 2;
 	public static double speciesMutation = 5, threshold = 0.7;
 	
+	private double bestScore = 0;
 	private Species bestSoFar;
 
-	public void Init(Player player)
+	public void init(Player player)
 	{
-		currentGeneration = new Generation(Mutator.Mutate());
+		currentGeneration = new Generation(Mutator.mutate());
 		this.player = player;
 		input.add(player.getX());
 		input.add((double) 0);
@@ -38,43 +39,39 @@ public class AI
 		input.add(0D);
 	}
 
-	public void Update(double gapX, double gapY)
+	public void update(double gapX, double gapY)
 	{
 		input.set(0, player.getX());
 		input.set(1, gapX);
 		input.set(2, gapY);
 		input.set(3, player.getSpeed());
 
-		boolean[] output = currentGeneration.currentSpecies.FeedForward(input);
+		boolean[] output = currentGeneration.currentSpecies.feedForward(input);
 
 		if (output[0])
-		{
 			player.moveRight();
-		}
 		if (output[1])
-		{
 			player.moveLeft();
-		}
 	}
 
-	double topScore = 0;
-
-	public void Death(double objectiveValue, double oldScore)
+	public void death(double objectiveValue, double oldScore)
 	{
-		if (objectiveValue > topScore)
+		if (objectiveValue > bestScore)
 		{
-			topScore = objectiveValue;
+			bestScore = objectiveValue;
 			bestSoFar = currentGeneration.currentSpecies;
 		}
-		currentGeneration.OnDeath(Math.pow(oldScore, 3));
-		if (currentGeneration.speciesNumber > speciesCount)
+		currentGeneration.onDeath(Math.pow(oldScore, 3));
+		if (currentGeneration.speciesNumber >= speciesCount)
 		{
 			currentGeneration = new Generation(currentGeneration.fittestWeights);
 			generationNumber++;
 		}
-		speciesMutation = 1.0 / objectiveValue;//100.0 / Math.pow(objectiveValue, 4);
-		System.out.println(String.format("%05d: %03.0f (%.0f) : %f [%03.0f]", generationNumber, objectiveValue, oldScore, speciesMutation, topScore));
+		speciesMutation = 100.0 / Math.pow(objectiveValue, 4);
+		System.out.println(String.format("%05d: %03.0f (%.0f) : %f [%03.0f]", generationNumber, objectiveValue, oldScore, speciesMutation, bestScore));
 	}
+	
+	/////////////////////////////////////////////// STREAMING ///////////////////////////////////////////////
 
 	public boolean saveBestSpeciesSoFar()
 	{
@@ -102,7 +99,7 @@ public class AI
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeErrorException(new Error(e), "Failed to save NN!");
+			throw new RuntimeException("Failed to save NN!", e);
 		}
 		return true;
 	}
@@ -122,7 +119,7 @@ public class AI
 		}
 		catch (Exception e)
 		{
-			throw new RuntimeErrorException(new Error(e), "Failed to load NN!");
+			throw new RuntimeException("Failed to load NN!", e);
 		}
 		return true;	
 	}

@@ -22,7 +22,7 @@ public class Species implements Serializable
 		load(in);
 	}
 
-	boolean[] FeedForward(ArrayList<Double> inputData)
+	boolean[] feedForward(ArrayList<Double> inputData)
 	{
 		return NeuralNetwork.FeedFoward(inputData, weights);
 	}
