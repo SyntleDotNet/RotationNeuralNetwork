@@ -197,7 +197,7 @@ public class Game
 		{
 			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
 				glfwSetWindowShouldClose(window, true);
-			
+			/*
 			if (key == GLFW_KEY_S && action == GLFW_PRESS)
 				ai.saveBestSpeciesSoFar();
 			if (key == GLFW_KEY_L && action == GLFW_PRESS)
@@ -219,7 +219,7 @@ public class Game
 					}
 					ai.loadSpecies();
 				}
-			}
+			}*/
 
 			if (action == GLFW_PRESS)
 				Keyboard.pressed(key);
