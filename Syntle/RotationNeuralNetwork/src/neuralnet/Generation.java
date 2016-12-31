@@ -4,15 +4,24 @@ public class Generation
 {
 	public int speciesNumber = 1;
 	public Species currentSpecies;
-	public double[][][] fittestWeights;
+	public DNA fittestDNA;
 	public double highestFitness;
-	double[][][] generationWeighting;
+	DNA generationDNA;
+	double mutationFactor = AI.generationMutation;
 
-	Generation(double[][][] weights)
+	Generation(DNA dna, double mutationFactor)
 	{
-		currentSpecies = new Species(Mutator.Mutate(weights, AI.speciesMutation));
-		fittestWeights = currentSpecies.weights;
-		generationWeighting = weights;
+		currentSpecies = new Species(dna);
+		fittestDNA = currentSpecies.dna;
+		generationDNA = dna;
+		this.mutationFactor = mutationFactor;
+	}
+	
+	Generation(DNA dna)
+	{
+		currentSpecies = new Species(dna);
+		fittestDNA = currentSpecies.dna;
+		generationDNA = dna;
 	}
 
 	public void OnDeath(double fitness)
@@ -20,10 +29,10 @@ public class Generation
 		if (fitness > highestFitness)
 		{
 			highestFitness = fitness;
-			fittestWeights = currentSpecies.weights;
+			fittestDNA = currentSpecies.dna;
 		}
 
-		currentSpecies = new Species(Mutator.Mutate(generationWeighting, Math.pow(AI.speciesMutation, speciesNumber)));
+		currentSpecies = new Species(Mutator.Mutate(generationDNA, mutationFactor));
 		speciesNumber++;
 	}
 }

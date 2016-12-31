@@ -4,10 +4,12 @@ import java.util.ArrayList;
 
 public class NeuralNetwork
 {
-	public static boolean[] FeedFoward(ArrayList<Double> input, double[][][] weights)
+	public static boolean[] FeedFoward(ArrayList<Double> input, DNA dna)
 	{
+		double[][][] weights = dna.getWeights();
+		double[][] bias = dna.getBias();
 		boolean[] output = new boolean[AI.outputs];
-
+		
 		// Initialise an array to store node values
 		boolean[][] nodeValues = new boolean[AI.layers + 1][];
 
@@ -25,6 +27,7 @@ public class NeuralNetwork
 					{
 						thisNodeValue += input.get(currentInput) * weights[layer][node][currentInput];
 					}
+					thisNodeValue *= bias[layer][node];
 					nodeValues[layer][node] = Sigmoid(thisNodeValue);
 				}
 			}
@@ -39,6 +42,7 @@ public class NeuralNetwork
 						if(nodeValues[layer + 1][previousNode])
 							thisNodeValue += weights[layer][node][previousNode]; // Layer + 1 means previous layer (to the left)
 					}
+					thisNodeValue *= bias[layer][node];
 					nodeValues[layer][node] = Sigmoid(thisNodeValue);
 				}
 			}
@@ -54,6 +58,7 @@ public class NeuralNetwork
 				if (nodeValues[1][previousNode])
 					outputValue += weights[0][outputNode][previousNode];
 			}
+			outputValue *= bias[0][outputNode];
 			output[outputNode] = Sigmoid(outputValue);
 		}
 

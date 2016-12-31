@@ -8,7 +8,7 @@ public class Player
 	private final double y = 50;
 	private final double size = 50;
 	private double speed;
-	private final double acceleration = 0.8;
+	private final double acceleration = 1.8;
 	private final double friction = 0.05;
 	
 	public Player()

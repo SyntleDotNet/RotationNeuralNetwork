@@ -20,11 +20,11 @@ public class AI
 	int generationNumber = 1;
 
 	// Natural Selection / Evolution Model Configuration
-	int speciesCount = 10;
+	int speciesCount = 100;
 
 	// Neural Network Configuration (suggest leaving layers,nodes + inputs as is)
 	public static int layers = 1, nodes = 3, inputs = 4, outputs = 2;
-	public static double speciesMutation = 5, threshold = 0.7;
+	public static double generationMutation = 1, threshold = 0.7;
 	
 	private Species bestSoFar;
 
@@ -35,14 +35,14 @@ public class AI
 		input.add(player.getX());
 		input.add((double) 0);
 		input.add((double) 0);
-		input.add(0D);
+		input.add((double) 0);
 	}
 
 	public void Update(double gapX, double gapY)
 	{
 		input.set(0, player.getX());
 		input.set(1, gapX);
-		input.set(2, gapY);
+		//input.set(2, gapY);
 		input.set(3, player.getSpeed());
 
 		boolean[] output = currentGeneration.currentSpecies.FeedForward(input);
@@ -61,19 +61,20 @@ public class AI
 
 	public void Death(double objectiveValue, double oldScore)
 	{
+		objectiveValue += 5 / (1+ Math.abs(input.get(0) - input.get(1)));
+		
 		if (objectiveValue > topScore)
 		{
 			topScore = objectiveValue;
 			bestSoFar = currentGeneration.currentSpecies;
 		}
-		currentGeneration.OnDeath(Math.pow(oldScore, 3));
+		currentGeneration.OnDeath(objectiveValue);         
 		if (currentGeneration.speciesNumber > speciesCount)
 		{
-			currentGeneration = new Generation(currentGeneration.fittestWeights);
+			currentGeneration = new Generation(currentGeneration.fittestDNA, generationMutation / currentGeneration.highestFitness);
 			generationNumber++;
 		}
-		speciesMutation = 1.0 / objectiveValue;//100.0 / Math.pow(objectiveValue, 4);
-		System.out.println(String.format("%05d: %03.0f (%.0f) : %f [%03.0f]", generationNumber, objectiveValue, oldScore, speciesMutation, topScore));
+		System.out.println(String.format("%05d: %03.5f (%.0f) : %f [%03.0f]", generationNumber, objectiveValue, oldScore, currentGeneration.mutationFactor, topScore));
 	}
 
 	public boolean saveBestSpeciesSoFar()

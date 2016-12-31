@@ -10,11 +10,11 @@ public class Species implements Serializable
 {
 	private static final long serialVersionUID = 1915595989223667186L;
 	
-	double[][][] weights;
+	DNA dna;
 
-	public Species(double[][][] weights)
+	public Species(DNA dna)
 	{
-		this.weights = weights;
+		this.dna = dna;
 	}
 	
 	public Species(DataInputStream in) throws IOException
@@ -24,11 +24,12 @@ public class Species implements Serializable
 
 	boolean[] FeedForward(ArrayList<Double> inputData)
 	{
-		return NeuralNetwork.FeedFoward(inputData, weights);
+		return NeuralNetwork.FeedFoward(inputData, dna);
 	}
 	
 	public void save(DataOutputStream stream) throws IOException
 	{
+		double[][][] weights = dna.getWeights();
 		stream.writeLong(serialVersionUID);
 		stream.writeInt(weights.length);
 		for (double[][] x : weights)
@@ -49,7 +50,7 @@ public class Species implements Serializable
 		if (serialVersionUID == 1915595989223667186L)
 		{
 			int sizeX = stream.readInt();
-			weights = new double[sizeX][][];
+			double[][][] weights = new double[sizeX][][];
 			for (int x = 0; x < sizeX; x += 1)
 			{
 				int sizeY = stream.readInt();
@@ -62,6 +63,8 @@ public class Species implements Serializable
 						weights[x][y][z] = stream.readDouble();
 				}
 			}
+			
+			dna = new DNA(weights, dna.getBias());
 		}
 		else throw new RuntimeException("Unknown file format for NN!");
 	}
