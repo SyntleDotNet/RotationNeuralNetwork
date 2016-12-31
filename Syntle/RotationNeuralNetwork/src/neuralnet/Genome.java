@@ -24,36 +24,76 @@ public class Genome
 		Connection connection = connections.get(connectionNumber);
 		connection.weight += rand.nextGaussian();
 		connections.set(connectionNumber, connection);
+		UpdateNodes();
 	}
 
+	public void GenomeTick()
+	{
+		for (int node = 0; node < nodes.size(); node++)
+		{
+			nodes.get(node).updatedThisTick = false;
+		}
+	}
+	
+	public void UpdateNodes()
+	{
+		for (int node = 0; node < nodes.size(); node++)
+		{
+			nodes.get(node).ClearConnections();
+			NeuralNetwork.PopulateDestinationNodes(this);
+		}
+	}
+	
 	// Add a new connection
 	public void LinkMutate()
 	{
 		Node source = SelectSourceNode();
 		Node destination = SelectDestinationNode();
-		connections.add(new Connection(source, destination, rand.nextDouble() * 4 - 2, true, AI.getInnovationNumber()));
+		Connection connection = new Connection(source, destination, rand.nextDouble() * 4 - 2, true, AI.getInnovationNumber());
+		
+		System.out.println("Adding connection from " + source.nodeID + " to " + destination.nodeID);
+		connections.add(connection);
+		UpdateNodes();
 	}
 
 	// Replace a connection with a connection through a hidden node
 	public void NodeMutate()
-	{		
+	{
 		int connectionNumber = rand.nextInt(connections.size());
 		Connection connection = connections.get(connectionNumber);
 		connection.setEnabled(false);
-		
+
 		Node source = connection.getSourceNode();
 		Node destination = connection.getDestinationNode();
-		
+
 		Node nodeHidden = new Node(NodeType.HIDDEN);
 		nodes.add(nodeHidden);
-		
+
 		connections.add(new Connection(source, nodeHidden, rand.nextDouble() * 4 - 2, true, AI.getInnovationNumber()));
 		connections.add(new Connection(nodeHidden, destination, rand.nextDouble() * 4 - 2, true, AI.getInnovationNumber()));
+		UpdateNodes();
 	}
 	
-	public Node SelectSourceNode()
+	public ArrayList<Node> GetOutputNodes(){
+		@SuppressWarnings("unchecked")
+		ArrayList<Node> outputNodes = (ArrayList<Node>) nodes.clone();
+		for (int node = 0; node < outputNodes.size(); node++)
+		{
+			if (outputNodes.get(node).nodeType != NodeType.OUTPUT)
+			{
+				outputNodes.remove(node);
+				node--;
+			}
+		}
+		
+		return outputNodes;
+		
+	}
+	
+	Node SelectSourceNode()
 	{
-		ArrayList<Node> possibleSourceNodes = nodes;
+		@SuppressWarnings("unchecked")
+		ArrayList<Node> possibleSourceNodes = (ArrayList<Node>) nodes.clone();
 
 		for (int node = 0; node < possibleSourceNodes.size(); node++)
 		{
@@ -65,19 +105,19 @@ public class Genome
 		}
 
 		return possibleSourceNodes.get(rand.nextInt(possibleSourceNodes.size()));
-		
+
 	}
 
-	public Node SelectDestinationNode()
+	Node SelectDestinationNode()
 	{
-		ArrayList<Node> possibleDestinationNodes = nodes;
-
+		@SuppressWarnings("unchecked")
+		ArrayList<Node> possibleDestinationNodes = (ArrayList<Node>) nodes.clone();
 		for (int node = 0; node < possibleDestinationNodes.size(); node++)
 		{
 			if (possibleDestinationNodes.get(node).nodeType == NodeType.INPUT)
 			{
-				node--;
 				possibleDestinationNodes.remove(node);
+				node--;
 			}
 		}
 

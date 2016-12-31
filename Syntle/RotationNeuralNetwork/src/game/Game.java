@@ -148,7 +148,7 @@ public class Game
 				if (lowestBlock != null)
 					ai.Update(lowestBlock.gapX(), leastY);
 
-				if (Keyboard.isKeyPressed(GLFW_KEY_SPACE))
+				if (!Keyboard.isKeyPressed(GLFW_KEY_SPACE))
 				{
 					synchronized (updateLock)
 					{
