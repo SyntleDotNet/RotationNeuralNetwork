@@ -99,12 +99,12 @@ public class Game
 						score += 1;
 					}
 				}
-				
+
 				synchronized (blocks)
 				{
 					for (Integer i : toRemove)
 						blocks.remove((int) i);
-					
+
 					if (greatestBlockY < threshold)
 					{
 						blocks.add(new Block());
@@ -159,10 +159,10 @@ public class Game
 						catch (InterruptedException e)
 						{
 							e.printStackTrace();
-						}	
+						}
 					}
 				}
-				
+
 				if (resetPending)
 				{
 					reset();
@@ -182,7 +182,7 @@ public class Game
 			width = height * widthToHeightRatio;
 		else if (width != 0)
 			height = width / widthToHeightRatio;
-		
+
 		GLFWErrorCallback.createPrint(System.err).set();
 		if (!glfwInit())
 			throw new IllegalStateException("Unable to initialize GLFW");
@@ -198,28 +198,9 @@ public class Game
 			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
 				glfwSetWindowShouldClose(window, true);
 			/*
-			if (key == GLFW_KEY_S && action == GLFW_PRESS)
-				ai.saveBestSpeciesSoFar();
-			if (key == GLFW_KEY_L && action == GLFW_PRESS)
-			{
-				resetPending = true;
-				synchronized (resetLock)
-				{
-					try
-					{
-						synchronized (updateLock)
-						{
-							updateLock.notifyAll();
-						}
-						resetLock.wait();
-					}
-					catch (InterruptedException e)
-					{
-						e.printStackTrace();
-					}
-					ai.loadSpecies();
-				}
-			}*/
+			 * if (key == GLFW_KEY_S && action == GLFW_PRESS) ai.saveBestSpeciesSoFar(); if (key == GLFW_KEY_L && action == GLFW_PRESS) { resetPending = true; synchronized (resetLock) { try { synchronized (updateLock) {
+			 * updateLock.notifyAll(); } resetLock.wait(); } catch (InterruptedException e) { e.printStackTrace(); } ai.loadSpecies(); } }
+			 */
 
 			if (action == GLFW_PRESS)
 				Keyboard.pressed(key);
@@ -304,10 +285,10 @@ public class Game
 				for (Block block : blocks)
 					block.render();
 			}
-			
+
 			glfwSwapBuffers(window);
 			glfwPollEvents();
-			
+
 			synchronized (updateLock)
 			{
 				updateLock.notifyAll();

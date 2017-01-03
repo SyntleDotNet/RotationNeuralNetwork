@@ -11,22 +11,25 @@ public class Node
 
 	public final int nodeID;
 	public final NodeType nodeType;
+	public final double x;
 	public boolean nodeFired = false, updatedThisTick = false;
 	ArrayList<Connection> connections = new ArrayList<>();
-	
-	Node(NodeType nodeType)
+
+	Node(NodeType nodeType, double x)
 	{
 		this.nodeType = nodeType;
+		this.x = x;
 		nodeID = AI.getNodeNumber();
 	}
-	
+
 	// Solve recursively
-	public boolean GetFired(){
+	public boolean GetFired()
+	{
 		if (updatedThisTick)
 			return nodeFired;
 		
 		double nodeValue = 0;
-		
+
 		for (int connection = 0; connection < connections.size(); connection++)
 		{
 			Connection thisConnection = connections.get(connection);
@@ -38,19 +41,21 @@ public class Node
 					nodeValue += thisConnection.weight;
 			}
 		}
-		
+
 		ClearConnections();
-		
+
 		nodeFired = NeuralNetwork.SigmoidActivation(nodeValue);
 		updatedThisTick = true;
 		return nodeFired;
 	}
-	
-	public void AddConnection(Connection connection){
+
+	public void AddConnection(Connection connection)
+	{
 		connections.add(connection);
 	}
-	
-	public void ClearConnections(){
+
+	public void ClearConnections()
+	{
 		connections.clear();
 	}
 }
